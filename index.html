@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ore di Lavoro">
+  <link rel="apple-touch-icon" href="icon.png">
+  <title>Registro Ore Lavoro</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; margin: 0; background: #f8f8f8; }
+    label, input, button { display: block; width: 100%; margin: 10px 0; font-size: 1rem; }
+    button { padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #eaeaea; }
+  </style>
+</head>
+<body>
+
+<h2>Registro Ore di Lavoro</h2>
+
+<label>Data: <input type="date" id="data"></label>
+<label>Ora Inizio: <input type="time" id="oraInizio"></label>
+<label>Ora Fine: <input type="time" id="oraFine"></label>
+<button onclick="aggiungiRecord()">Aggiungi</button>
+
+<table id="tabellaOre">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Inizio</th>
+      <th>Fine</th>
+      <th>Ore Totali</th>
+      <th>Straordinari</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+  function aggiungiRecord() {
+    const data = document.getElementById('data').value;
+    const inizio = document.getElementById('oraInizio').value;
+    const fine = document.getElementById('oraFine').value;
+
+    if (!data || !inizio || !fine) {
+      alert('Compila tutti i campi!');
+      return;
+    }
+
+    const inizioDate = new Date(`1970-01-01T${inizio}`);
+    const fineDate = new Date(`1970-01-01T${fine}`);
+    const ore = (fineDate - inizioDate) / (1000 * 60 * 60);
+
+    if (ore <= 0) {
+      alert('L’orario di fine deve essere dopo quello di inizio!');
+      return;
+    }
+
+    const straordinari = ore > 8 ? (ore - 8).toFixed(2) : "0.00";
+
+    const tabella = document.getElementById('tabellaOre').querySelector('tbody');
+    const riga = tabella.insertRow();
+    riga.innerHTML = `
+      <td>${data}</td>
+      <td>${inizio}</td>
+      <td>${fine}</td>
+      <td>${ore.toFixed(2)}</td>
+      <td>${straordinari}</td>
+    `;
+  }
+</script>
+
+</body>
+</html>
